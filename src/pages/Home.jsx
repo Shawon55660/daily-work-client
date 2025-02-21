@@ -12,6 +12,8 @@ const Home = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    
+
   
     const {data:tasks=[],isLoading,refetch} =useQuery({
         queryKey:['tasks'],
@@ -29,6 +31,19 @@ const Home = () => {
         setTitle("");
         setDescription("");
     };
+    //update modal system
+    const [task, setTaskInfo] = useState({});
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+    const closeModalUpdate = () => setIsOpenUpdate(false);
+
+  const openModalUpdate = async (id) => {
+    
+    const res = await axios.get(`http://localhost:3000/task/${id}`);
+    if (res.data) {
+      setTaskInfo(res.data);
+    }
+    setIsOpenUpdate(true);
+  };
 
     // Handle Task 
     const handleTaskSubmit =async (e) => {
@@ -115,6 +130,32 @@ const Home = () => {
             }
         });
     }
+    const handleEdit =async (e)=>{
+       
+       e.preventDefault()
+       const from =e.target
+
+       const title = from.title.value
+       const description  =from.description.value
+       const date = new Date()
+       const updateInfo = {title,description,date}
+       const res = await axios.patch(`http://localhost:3000/task/${task._id}`, updateInfo)
+       if(res.data){
+        toast.success('Task Edit Successfully', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+           
+            });
+       }
+       refetch()
+       closeModalUpdate()
+    }
 
     return (
         <div className="container mx-auto mt-10 p-5">
@@ -127,7 +168,7 @@ const Home = () => {
                 </button>
             </div>
 
-            {/* Modal */}
+            {/* Modal  for added task*/}
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -166,13 +207,54 @@ const Home = () => {
                     </div>
                 </div>
             )}
+             {/* Modal  for edit task*/}
+             {isOpenUpdate && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold mb-4">Edit  Task</h2>
+
+                       
+                        <form onSubmit={handleEdit}>
+                        <input
+                            type="text"
+                            name="title"
+                            maxLength={50}
+                          defaultValue={task.title}
+                            placeholder="Task Title (Max 50 chars)"
+                            className="w-full p-2 border rounded mb-3"
+                        />
+
+                       
+                        <textarea
+                            maxLength={200}
+                            name="description"
+                           defaultValue={task.description}
+                            placeholder="Task Description (Max 200 chars)"
+                            className="w-full p-2 border rounded mb-3"
+                        ></textarea>
+
+                       
+                        <div className="flex justify-end gap-2">
+                            <button onClick={closeModalUpdate} className="px-4 py-2 bg-gray-400 text-white rounded-md">
+                                Cancel
+                            </button>
+                            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                                Update
+                            </button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            
+
 
             {/* Task Columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold mb-3">To-Do</h2>
                    {tasks.map(task=>  <div key={task._id} className="p-3 flex justify-between bg-white shadow rounded-md"> 
-                    <p>{task.title}</p> <div className="flex text-xl items-center  gap-2"><button><FaEdit /></button> <button onClick={()=>handleDelete(task._id)}><MdDeleteForever /></button></div>
+                    <p>{task.title}</p> <div className="flex text-xl items-center  gap-2"><button onClick={()=>openModalUpdate(task._id)}><FaEdit /></button> <button onClick={()=>handleDelete(task._id)}><MdDeleteForever /></button></div>
 
                    </div>)}
                 </div>
