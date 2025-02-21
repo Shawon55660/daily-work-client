@@ -2,12 +2,25 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Home = () => {
     const { user } = useContext(AuthContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+  
+    const {data:tasks=[],isLoading,refetch} =useQuery({
+        queryKey:['tasks'],
+        queryFn:async()=>{
+
+            const res = await axios.get(`http://localhost:3000/tasks?userEmail=${user?.email}`)
+            return res.data
+        }
+    })
 
     // modal stsytem 
     const openModal = () => setIsModalOpen(true);
@@ -37,9 +50,11 @@ const Home = () => {
         }
        const category = 'TO-DO'
        const date = new Date()
-        const taskInfo = {title,description,category,date}
+       const userEmail = user.email
+        const taskInfo = {title,description,category,userEmail,date}
         const res = await axios.post('http://localhost:3000/tasks',taskInfo)
         if(res.data.acknowledged){
+            refetch()
            
             toast.success('Task Added Successfully', {
                 position: "top-center",
@@ -69,6 +84,37 @@ const Home = () => {
         }
         closeModal();
     };
+    const handleDelete = (_id) => {
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to access this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async(result) => {
+            if (result.isConfirmed) {
+                const { data } = await axios.delete(`http://localhost:3000/tasks/${_id}`)
+              
+               
+                   
+                if (data.deletedCount) {
+                    refetch()
+                    
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your taask has been deleted.",
+                        icon: "success"
+                    });
+                    
+                }
+                
+    
+            }
+        });
+    }
 
     return (
         <div className="container mx-auto mt-10 p-5">
@@ -125,7 +171,10 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold mb-3">To-Do</h2>
-                    <div className="p-3 bg-white shadow rounded-md">Task A</div>
+                   {tasks.map(task=>  <div key={task._id} className="p-3 flex justify-between bg-white shadow rounded-md"> 
+                    <p>{task.title}</p> <div className="flex text-xl items-center  gap-2"><button><FaEdit /></button> <button onClick={()=>handleDelete(task._id)}><MdDeleteForever /></button></div>
+
+                   </div>)}
                 </div>
                 <div className="bg-yellow-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold mb-3">In Progress</h2>
