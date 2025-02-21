@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const Home = () => {
     const { user } = useContext(AuthContext);
@@ -253,8 +254,9 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold mb-3">To-Do</h2>
-                   {tasks.map(task=>  <div key={task._id} className="p-3 flex justify-between bg-white shadow rounded-md"> 
-                    <p>{task.title}</p> <div className="flex text-xl items-center  gap-2"><button onClick={()=>openModalUpdate(task._id)}><FaEdit /></button> <button onClick={()=>handleDelete(task._id)}><MdDeleteForever /></button></div>
+                   {tasks.map(task=>  <div key={task._id} className="p-3 flex mb-2 justify-between bg-white shadow rounded-md"> 
+                    <div><p className="text-lg font-semibold">{task.title}</p> <p className="text-xs pt-2 font-semibold text-gray-500">{format(new Date(task.date), 'PPpp')}</p></div>
+                     <div className="flex text-xl items-center  gap-2"><button onClick={()=>openModalUpdate(task._id)}><FaEdit /></button> <button onClick={()=>handleDelete(task._id)}><MdDeleteForever /></button></div>
 
                    </div>)}
                 </div>
