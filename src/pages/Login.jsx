@@ -7,13 +7,13 @@ import {  useNavigate } from "react-router-dom";
 const Login = () => {
     const navigate = useNavigate()
     
-    const {googleLogin,setUser,setLoader,user} = useContext(AuthContext)
+    const {googleLogin,setUser,user} = useContext(AuthContext)
     console.log(user)
     const handleGoogle = ()=>{
         googleLogin()
         .then(users=>{
             setUser(users.user)
-            setLoader(false)
+          
             alert('successfully login')
             navigate('/')
         })
