@@ -1,22 +1,26 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
-import { MdDeleteForever } from "react-icons/md";
+import {  MdDeleteForever, MdOutlineAddBox } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-import { useDrag, useDrop } from "react-dnd"; // import necessary hooks for drag and drop
+import { useDrag, useDrop } from "react-dnd"; 
 import Loader from "./Loader";
+import { FaArrowRightToBracket } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const Test = () => {
-  const { user } = useContext(AuthContext);
+  const { user,logOut,setLoader } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  console.log(user)
+  const navigate = useNavigate()
+ 
 
   const { data: tasks = [], refetch,isLoading } = useQuery({
     queryKey: ['tasks'],
@@ -47,7 +51,19 @@ const Test = () => {
     }
     setIsOpenUpdate(true);
   };
-
+//logOut Handle
+const handleLogOut =()=>{
+  logOut()
+  .then(res=>{
+   
+      navigate('/')
+      setLoader(false)
+      
+  })
+  .catch(error=>{
+     toast.error('Something is Wrong, Please try again');
+  })
+}
   // Handle Task
   const handleTaskSubmit = async (e) => {
     e.preventDefault();
@@ -168,8 +184,11 @@ const Test = () => {
      <div className="flex gap-2 container py-3 mx-auto  items-center justify-between">
      <h1 className=" text-xl md:text-2xl lg:text-3xl font-bold text-center "> Task Dashboard</h1>
   <div className="flex  gap-3 items-center">
-     <button onClick={openModal} className="px-3 py-2 lg:px-4 lg:py-2 text-sm bg-white font-semibold  text-black rounded-md">
-     Add Task
+     <button onClick={openModal} className="px-3 cursor-pointer py-2 flex items-center gap-1  lg:py-2 text-sm bg-white font-semibold  text-black rounded-sm">
+     <MdOutlineAddBox /><p>Add Task</p>
+   </button>
+   <button onClick={handleLogOut} className="px-3 py-2 cursor-pointer  flex items-center gap-1 lg:py-2 text-sm bg-white font-semibold  text-black rounded-sm">
+   <FaArrowRightToBracket />  Logout
    </button>
  <img className="w-12 h-12 rounded-full" src={user?.photoURL} alt="hello" /></div>
  </div>
@@ -263,6 +282,7 @@ const Test = () => {
    <DropZone category="Done">
      {tasks.filter(task => task.category === "Done").map(task => (
        <DraggableTask key={task._id} task={task} category="Done" />
+       
      ))}
    </DropZone>
  </div>

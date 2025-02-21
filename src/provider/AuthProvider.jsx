@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.init";
 
@@ -16,8 +16,11 @@ const AuthProvider = ({children}) => {
         const provider = new GoogleAuthProvider()
         return signInWithPopup(auth,provider)
     }
+    const logOut = ()=>{
+        return signOut(auth)
+    }
     const authInfo = {
-        user,setUser,loader,setLoader,googleLogin
+        user,setUser,loader,setLoader,googleLogin,logOut
     }
     useEffect(() => {
         const unsubcribe = onAuthStateChanged(auth, async user => {
@@ -34,7 +37,7 @@ const AuthProvider = ({children}) => {
         }
         
        
-    }, [])
+    }, [user,loader])
     return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
     );

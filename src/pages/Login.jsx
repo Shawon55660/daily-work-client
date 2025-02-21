@@ -15,7 +15,7 @@ const Login = () => {
             setUser(users.user)
           
             alert('successfully login')
-            navigate('/')
+            navigate('/task-dashboard')
         })
     }
    
