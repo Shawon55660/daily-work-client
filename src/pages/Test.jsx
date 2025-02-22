@@ -25,7 +25,7 @@ const Test = () => {
   const { data: tasks = [], refetch,isLoading } = useQuery({
     queryKey: ['tasks'],
     queryFn: async () => {
-      const res = await axios.get(`https://daily-work-server.vercel.app/tasks?userEmail=${user?.email}`);
+      const res = await axios.get(`https://daily-work-server.vercel.app/tasks?userEmail=${user?.email}`,{withCredentials: true});
     
       return res.data;
     }
@@ -45,7 +45,7 @@ const Test = () => {
   const closeModalUpdate = () => setIsOpenUpdate(false);
 
   const openModalUpdate = async (id) => {
-    const res = await axios.get(`https://daily-work-server.vercel.app/task/${id}`);
+    const res = await axios.get(`https://daily-work-server.vercel.app/task/${id}`,{withCredentials: true});
     if (res.data) {
       setTaskInfo(res.data);
     }
@@ -75,7 +75,7 @@ const handleLogOut =()=>{
     const date = new Date();
     const userEmail = user.email;
     const taskInfo = { title, description, category, userEmail, date };
-    const res = await axios.post('https://daily-work-server.vercel.app/tasks', taskInfo);
+    const res = await axios.post('https://daily-work-server.vercel.app/tasks', taskInfo,{withCredentials: true});
     if (res.data.acknowledged) {
       refetch();
       toast.success('Task Added Successfully', {
@@ -106,7 +106,7 @@ const handleLogOut =()=>{
       confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const { data } = await axios.delete(`https://daily-work-server.vercel.app/tasks/${_id}`);
+        const { data } = await axios.delete(`https://daily-work-server.vercel.app/tasks/${_id}`,{withCredentials: true});
         if (data.deletedCount) {
           refetch();
           

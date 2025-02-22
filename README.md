@@ -1,8 +1,34 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+# Live Link
+live(https://to-do-list-fe473.web.app/)
+# Website Name
+# Daily Task
+
+# Some  React Fundamental Concepts which used in the project
+
+- 
+- In this project i use some fundamental concepts of react such as 
+- React hooks (useState)
+- Context API
+- State props drilling
+- React Router
+- Virtual DOM
+- UseNavigation Hooks
+- npm package like (sweetalert,react-dnd-html5-backend )
+- private Router
+- Firebase Authentication()
+- Axois
+- tanststackQuery
+-drag and drop freture
+#  I have used for handling and managing data (context API  & use firebase as a database)
+#  CRUD operation (delete,create,update,read)
+
+
+
+
+
+
+

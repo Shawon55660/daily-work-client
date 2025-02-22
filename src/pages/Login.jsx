@@ -14,16 +14,21 @@ const Login = () => {
    
     const handleGoogle = ()=>{
         googleLogin()
-        .then((users)=>{
+        .then(async(users)=>{
             setUser(users.user)
             const userEmail = user.email;
             const userName = user.displayName
             const userInfo = {userEmail,userName}
-            axios.post(`https://daily-work-server.vercel.app/users`,userInfo)
+            const res = await   axios.post(`https://daily-work-server.vercel.app/users`,userInfo,{withCredentials: true})
+            if(res){
+
+                navigate('/')
+            }
+            
            
           
            
-            navigate('/')
+           
         })
     }
    
