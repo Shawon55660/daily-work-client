@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import {  useNavigate } from "react-router-dom";
@@ -8,14 +9,14 @@ const Login = () => {
     const navigate = useNavigate()
     
     const {googleLogin,setUser,user} = useContext(AuthContext)
-    console.log(user)
+   
     const handleGoogle = ()=>{
         googleLogin()
         .then(users=>{
             setUser(users.user)
           
-            alert('successfully login')
-            navigate('/task-dashboard')
+           
+            navigate('/')
         })
     }
    

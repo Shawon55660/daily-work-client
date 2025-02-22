@@ -26,9 +26,10 @@ const AuthProvider = ({children}) => {
         const unsubcribe = onAuthStateChanged(auth, async user => {
             if(user?.email){
                 setUser(user)
-                setLoader(false)
+               
                 
             }
+            setLoader(false)
             
             
         })

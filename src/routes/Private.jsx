@@ -11,9 +11,9 @@ const Private = ({children}) => {
     if(loader){
         return <Loader></Loader>
     }
-    if(user) return children
+    
 
-return <Navigate to='/'></Navigate>
+return user? children: <Navigate to='/login'></Navigate>
 };
 
 export default Private;

@@ -20,7 +20,7 @@ const Home = () => {
         queryKey:['tasks'],
         queryFn:async()=>{
 
-            const res = await axios.get(`http://localhost:3000/tasks?userEmail=${user?.email}`)
+            const res = await axios.get(`https://daily-work-server.vercel.app/tasks?userEmail=${user?.email}`)
             return res.data
         }
     })
@@ -39,7 +39,7 @@ const Home = () => {
 
   const openModalUpdate = async (id) => {
     
-    const res = await axios.get(`http://localhost:3000/task/${id}`);
+    const res = await axios.get(`https://daily-work-server.vercel.app/task/${id}`);
     if (res.data) {
       setTaskInfo(res.data);
     }
@@ -68,7 +68,7 @@ const Home = () => {
        const date = new Date()
        const userEmail = user.email
         const taskInfo = {title,description,category,userEmail,date}
-        const res = await axios.post('http://localhost:3000/tasks',taskInfo)
+        const res = await axios.post('https://daily-work-server.vercel.app/tasks',taskInfo)
         if(res.data.acknowledged){
             refetch()
            
@@ -112,7 +112,7 @@ const Home = () => {
             confirmButtonText: "Yes, delete it!"
         }).then(async(result) => {
             if (result.isConfirmed) {
-                const { data } = await axios.delete(`http://localhost:3000/tasks/${_id}`)
+                const { data } = await axios.delete(`https://daily-work-server.vercel.app/tasks/${_id}`)
               
                
                    
@@ -140,7 +140,7 @@ const Home = () => {
        const description  =from.description.value
        const date = new Date()
        const updateInfo = {title,description,date}
-       const res = await axios.patch(`http://localhost:3000/task/${task._id}`, updateInfo)
+       const res = await axios.patch(`https://daily-work-server.vercel.app/task/${task._id}`, updateInfo)
        if(res.data){
         toast.success('Task Edit Successfully', {
             position: "top-center",

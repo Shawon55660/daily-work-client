@@ -14,8 +14,8 @@ function App() {
       
       <Routes>
         
-        <Route path="/" element={<Login></Login>}></Route>
-        <Route path="/task-dashboard" element={<Private><Test></Test></Private>}></Route>
+        <Route path="/login" element={<Login></Login>}></Route>
+        <Route index  element={<Private><Test></Test></Private>}></Route>
       </Routes>
     </div>
   );
