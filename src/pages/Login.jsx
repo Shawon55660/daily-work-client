@@ -2,6 +2,8 @@
 import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import {  useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 
@@ -12,8 +14,13 @@ const Login = () => {
    
     const handleGoogle = ()=>{
         googleLogin()
-        .then(users=>{
+        .then((users)=>{
             setUser(users.user)
+            const userEmail = user.email;
+            const userName = user.displayName
+            const userInfo = {userEmail,userName}
+            axios.post(`https://daily-work-server.vercel.app/users`,userInfo)
+           
           
            
             navigate('/')
